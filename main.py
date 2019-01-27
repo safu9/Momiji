@@ -24,7 +24,25 @@ class Window(QObject):
         self.window.actionSave.triggered.connect(self.onSaveClick)
         self.window.actionSaveAs.triggered.connect(self.onSaveAsClick)
         self.window.actionExit.triggered.connect(self.onExitClick)
+
+        self.window.actionUndo.triggered.connect(self.window.textEdit.undo)
+        self.window.actionRedo.triggered.connect(self.window.textEdit.redo)
+        self.window.actionCopy.triggered.connect(self.window.textEdit.copy)
+        self.window.actionCut.triggered.connect(self.window.textEdit.cut)
+        self.window.actionPaste.triggered.connect(self.window.textEdit.paste)
+        self.window.actionSelectAll.triggered.connect(self.window.textEdit.selectAll)
+
         self.window.actionAbout.triggered.connect(self.onAboutClick)
+
+        self.window.textEdit.undoAvailable.connect(self.window.actionUndo.setEnabled)
+        self.window.textEdit.redoAvailable.connect(self.window.actionRedo.setEnabled)
+        self.window.textEdit.copyAvailable.connect(self.window.actionCopy.setEnabled)
+        self.window.textEdit.copyAvailable.connect(self.window.actionCut.setEnabled)
+
+        self.window.actionUndo.setEnabled(False)
+        self.window.actionRedo.setEnabled(False)
+        self.window.actionCopy.setEnabled(False)
+        self.window.actionCut.setEnabled(False)
 
         self.setTitle()
         self.window.resize(800, 600)
