@@ -1,6 +1,6 @@
 import sys
 
-from PySide2.QtCore import QEvent, QFile, QLocale, QObject, QTranslator
+from PySide2.QtCore import QEvent, QLocale, QObject, QTranslator
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QFileDialog, QMessageBox
 
@@ -11,12 +11,8 @@ class MainWindow(QObject):
         super().__init__()
 
         # Load UI File
-        file = QFile(filename)
-        file.open(QFile.ReadOnly)
-
         loader = QUiLoader()
-        self.window = loader.load(file)
-        file.close()
+        self.window = loader.load(filename)
 
         # Connect events
         self.window.actionNewFile.triggered.connect(self.onNewFileClick)
