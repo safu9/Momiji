@@ -1,14 +1,14 @@
 import sys
 
-from PySide2.QtCore import QFile, QObject
+from PySide2.QtCore import QEvent, QFile, QObject
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QFileDialog, QMessageBox
 
 
 class Window(QObject):
 
-    def __init__(self, filename, parent=None):
-        super().__init__(parent)
+    def __init__(self, filename):
+        super().__init__()
 
         # Load UI File
         file = QFile(filename)
@@ -38,6 +38,7 @@ class Window(QObject):
         self.window.textEdit.redoAvailable.connect(self.window.actionRedo.setEnabled)
         self.window.textEdit.copyAvailable.connect(self.window.actionCopy.setEnabled)
         self.window.textEdit.copyAvailable.connect(self.window.actionCut.setEnabled)
+        self.window.textEdit.modificationChanged.connect(self.setTitle)
 
         self.window.actionUndo.setEnabled(False)
         self.window.actionRedo.setEnabled(False)
@@ -45,31 +46,56 @@ class Window(QObject):
         self.window.actionCut.setEnabled(False)
 
         self.setTitle()
+        self.window.installEventFilter(self)
         self.window.resize(800, 600)
         self.window.show()
 
-    def setTitle(self, title=''):
+    def eventFilter(self, obj, event):
+        if obj is self.window and event.type() == QEvent.Close:
+            self.onExitClick()
+            event.ignore()
+            return True
+        return super().eventFilter(obj, event)
+
+    def setTitle(self):
+        title = self.window.textEdit.documentTitle()
         if not title:
             title = 'untitled'
+        if self.window.textEdit.document().isModified():
+            title += ' *'
         self.window.setWindowTitle(title + ' - Momiji')
 
+    def confirmToSave(self):
+        discard = False
+        if self.window.textEdit.document().isModified():
+            ret = QMessageBox.question(self.window, 'Confirm', 'This file has chages, do you want to save them?')
+            if ret == QMessageBox.Yes:
+                self.onSaveClick()
+            elif ret == QMessageBox.No:
+                discard = True
+        return not self.window.textEdit.document().isModified() or discard
+
     def onNewClick(self):
-        self.window.textEdit.setPlainText('')
+        if self.confirmToSave():
+            self.window.textEdit.setPlainText('')
 
     def onOpenClick(self):
-        ret = QFileDialog.getOpenFileName(self.window, 'Open File', '', 'Text files (*.txt);;Any files (*)')
-        if ret and ret[0]:
-            filepath = ret[0]
-            with open(filepath, 'r') as file:
-                self.window.textEdit.setPlainText(file.read())
-            self.window.textEdit.setDocumentTitle(filepath)
-            self.setTitle(filepath)
+        if self.confirmToSave():
+            ret = QFileDialog.getOpenFileName(self.window, 'Open File', '', 'Text files (*.txt);;Any files (*)')
+            if ret and ret[0]:
+                filepath = ret[0]
+                with open(filepath, 'r') as file:
+                    self.window.textEdit.setPlainText(file.read())
+                self.window.textEdit.setDocumentTitle(filepath)
+                self.setTitle()
 
     def onSaveClick(self):
         filepath = self.window.textEdit.documentTitle()
         if filepath:
             with open(filepath, 'w') as file:
                 file.write(self.window.textEdit.toPlainText())
+            self.window.textEdit.document().setModified(False)
+            self.setTitle()
         else:
             self.onSaveAsClick()
 
@@ -80,10 +106,13 @@ class Window(QObject):
             with open(filepath, 'w') as file:
                 file.write(self.window.textEdit.toPlainText())
             self.window.textEdit.setDocumentTitle(filepath)
-            self.setTitle(filepath)
+            self.window.textEdit.document().setModified(False)
+            self.setTitle()
 
     def onExitClick(self):
-        app.exit()
+        if self.confirmToSave():
+            self.window.removeEventFilter(self)
+            app.exit()
 
     def onAboutClick(self):
         QMessageBox.about(self.window, 'About Momiji', 'Momiji v0.1\nsimple cross-platform text editor')
