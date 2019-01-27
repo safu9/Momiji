@@ -1,11 +1,11 @@
 import sys
 
-from PySide2.QtCore import QEvent, QFile, QObject
+from PySide2.QtCore import QEvent, QFile, QLocale, QObject, QTranslator
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QFileDialog, QMessageBox
 
 
-class Window(QObject):
+class MainWindow(QObject):
 
     def __init__(self, filename):
         super().__init__()
@@ -19,7 +19,7 @@ class Window(QObject):
         file.close()
 
         # Connect events
-        self.window.actionNew.triggered.connect(self.onNewClick)
+        self.window.actionNewFile.triggered.connect(self.onNewFileClick)
         self.window.actionOpen.triggered.connect(self.onOpenClick)
         self.window.actionSave.triggered.connect(self.onSaveClick)
         self.window.actionSaveAs.triggered.connect(self.onSaveAsClick)
@@ -60,7 +60,7 @@ class Window(QObject):
     def setTitle(self):
         title = self.window.textEdit.documentTitle()
         if not title:
-            title = 'untitled'
+            title = self.tr('untitled')
         if self.window.textEdit.document().isModified():
             title += ' *'
         self.window.setWindowTitle(title + ' - Momiji')
@@ -68,20 +68,20 @@ class Window(QObject):
     def confirmToSave(self):
         discard = False
         if self.window.textEdit.document().isModified():
-            ret = QMessageBox.question(self.window, 'Confirm', 'This file has chages, do you want to save them?')
+            ret = QMessageBox.question(self.window, self.tr('Confirm'), self.tr('This file has chages, do you want to save them?'))
             if ret == QMessageBox.Yes:
                 self.onSaveClick()
             elif ret == QMessageBox.No:
                 discard = True
         return not self.window.textEdit.document().isModified() or discard
 
-    def onNewClick(self):
+    def onNewFileClick(self):
         if self.confirmToSave():
             self.window.textEdit.setPlainText('')
 
     def onOpenClick(self):
         if self.confirmToSave():
-            ret = QFileDialog.getOpenFileName(self.window, 'Open File', '', 'Text files (*.txt);;Any files (*)')
+            ret = QFileDialog.getOpenFileName(self.window, self.tr('Open File'), '', self.tr('Text files (*.txt);;Any files (*)'))
             if ret and ret[0]:
                 filepath = ret[0]
                 with open(filepath, 'r') as file:
@@ -100,7 +100,7 @@ class Window(QObject):
             self.onSaveAsClick()
 
     def onSaveAsClick(self):
-        ret = QFileDialog.getSaveFileName(self.window, 'Save File', '', 'Text files (*.txt);;Any files (*)')
+        ret = QFileDialog.getSaveFileName(self.window, self.tr('Save File'), '', self.tr('Text files (*.txt);;Any files (*)'))
         if ret and ret[0]:
             filepath = ret[0]
             with open(filepath, 'w') as file:
@@ -115,10 +115,14 @@ class Window(QObject):
             app.exit()
 
     def onAboutClick(self):
-        QMessageBox.about(self.window, 'About Momiji', 'Momiji v0.1\nsimple cross-platform text editor')
+        QMessageBox.about(self.window, self.tr('About Momiji'), 'Momiji v0.1\nsimple cross-platform text editor')
 
 
 if __name__ == '__main__':
+    translator = QTranslator()
+    translator.load(QLocale(), 'i18n/')
+
     app = QApplication(sys.argv)
-    window = Window('window.ui')
+    app.installTranslator(translator)
+    window = MainWindow('window.ui')
     sys.exit(app.exec_())

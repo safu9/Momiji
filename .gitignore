@@ -2,3 +2,6 @@
 __pycache__/
 *.pyc
 /venv/
+
+# Qt
+i18n/*.qm
