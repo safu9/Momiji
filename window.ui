@@ -418,7 +418,7 @@
     <string>Find</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+F</string>
+    <string notr="true">Ctrl+F</string>
    </property>
   </action>
   <action name="actionFindNext">
@@ -426,7 +426,7 @@
     <string>Find Next</string>
    </property>
    <property name="shortcut">
-    <string>F3</string>
+    <string notr="true">F3</string>
    </property>
   </action>
   <action name="actionFindPrevious">
@@ -434,7 +434,7 @@
     <string>Find Previous</string>
    </property>
    <property name="shortcut">
-    <string>Shift+F3</string>
+    <string notr="true">Shift+F3</string>
    </property>
   </action>
   <action name="actionFindAll">
@@ -447,7 +447,7 @@
     <string>Replace</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string notr="true">Ctrl+R</string>
    </property>
   </action>
   <action name="actionReplaceNext">
@@ -468,7 +468,7 @@
     <string>Select Next</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+D</string>
+    <string notr="true">Ctrl+D</string>
    </property>
   </action>
   <action name="actionFindSelectAll">
