@@ -88,6 +88,7 @@ class MainWindow(QObject):
     def onNewFileClick(self):
         if self.confirmToSave():
             self.window.textEdit.setPlainText('')
+            self.setTitle()
 
     def onOpenClick(self):
         if self.confirmToSave():
