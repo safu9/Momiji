@@ -1,8 +1,9 @@
 import sys
 
+import chardet
 from PySide2.QtCore import QEvent, QLocale, QObject, QTranslator
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication, QFileDialog, QMessageBox
+from PySide2.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox
 
 
 class MainWindow(QObject):
@@ -40,6 +41,19 @@ class MainWindow(QObject):
         self.window.actionRedo.setEnabled(False)
         self.window.actionCopy.setEnabled(False)
         self.window.actionCut.setEnabled(False)
+
+        # Statusbar
+        self.labelStatus = QLabel()
+        self.window.statusBar().addPermanentWidget(self.labelStatus, stretch=1)
+        self.labelNewLine = QLabel()
+        self.window.statusBar().addPermanentWidget(self.labelNewLine)
+        self.labelEncoding = QLabel()
+        self.window.statusBar().addPermanentWidget(self.labelEncoding)
+
+        self.newline = 'LF'
+        self.labelNewLine.setText(self.newline)
+        self.encoding = 'UTF-8'
+        self.labelEncoding.setText(self.encoding)
 
         self.setTitle()
         self.window.installEventFilter(self)
@@ -80,15 +94,28 @@ class MainWindow(QObject):
             ret = QFileDialog.getOpenFileName(self.window, self.tr('Open File'), '', self.tr('Text files (*.txt);;Any files (*)'))
             if ret and ret[0]:
                 filepath = ret[0]
-                with open(filepath, 'r') as file:
-                    self.window.textEdit.setPlainText(file.read())
+                with open(filepath, 'rb') as file:
+                    bin = file.read()
+                    det = chardet.detect(bin)
+
+                    if not det['encoding'] or det['encoding'].upper() == 'ASCII':
+                        self.encoding = 'UTF-8'
+                    else:
+                        self.encoding = det['encoding'].upper()
+
+                    data = bin.decode(self.encoding)
+                    self.window.textEdit.setPlainText(data)
+                self.newline = 'CRLF' if '\r\n' in data else 'LF'
+                self.labelNewLine.setText(self.newline)
+                self.labelEncoding.setText(self.encoding)
                 self.window.textEdit.setDocumentTitle(filepath)
                 self.setTitle()
 
     def onSaveClick(self):
         filepath = self.window.textEdit.documentTitle()
         if filepath:
-            with open(filepath, 'w') as file:
+            newline = '\r\n' if self.newline == 'CRLF' else '\n'
+            with open(filepath, 'w', encoding=self.encoding, newline=newline) as file:
                 file.write(self.window.textEdit.toPlainText())
             self.window.textEdit.document().setModified(False)
             self.setTitle()
@@ -99,7 +126,8 @@ class MainWindow(QObject):
         ret = QFileDialog.getSaveFileName(self.window, self.tr('Save File'), '', self.tr('Text files (*.txt);;Any files (*)'))
         if ret and ret[0]:
             filepath = ret[0]
-            with open(filepath, 'w') as file:
+            newline = '\r\n' if self.newline == 'CRLF' else '\n'
+            with open(filepath, 'w', encoding=self.encoding, newline=newline) as file:
                 file.write(self.window.textEdit.toPlainText())
             self.window.textEdit.setDocumentTitle(filepath)
             self.window.textEdit.document().setModified(False)
