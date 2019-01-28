@@ -1,9 +1,10 @@
 import sys
 
 import chardet
-from PySide2.QtCore import QEvent, QLocale, QObject, QTranslator
+from PySide2.QtCore import QEvent, QLocale, QObject, QRegExp, QTranslator
+from PySide2.QtGui import QColor, QTextCursor, QTextDocument
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox
+from PySide2.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox, QStyle, QTextEdit
 
 
 class MainWindow(QObject):
@@ -15,7 +16,7 @@ class MainWindow(QObject):
         loader = QUiLoader()
         self.window = loader.load(filename)
 
-        # Connect events
+        # Menu
         self.window.actionNewFile.triggered.connect(self.onNewFileClick)
         self.window.actionOpen.triggered.connect(self.onOpenClick)
         self.window.actionSave.triggered.connect(self.onSaveClick)
@@ -29,6 +30,16 @@ class MainWindow(QObject):
         self.window.actionPaste.triggered.connect(self.window.textEdit.paste)
         self.window.actionSelectAll.triggered.connect(self.window.textEdit.selectAll)
 
+        self.window.actionFind.triggered.connect(self.onFindClick)
+        self.window.actionFindNext.triggered.connect(self.onFindNextClick)
+        self.window.actionFindPrevious.triggered.connect(self.onFindPreviousClick)
+        self.window.actionFindAll.triggered.connect(self.onFindAllClick)
+        self.window.actionReplace.triggered.connect(self.onReplaceClick)
+        self.window.actionReplaceNext.triggered.connect(self.onReplaceNextClick)
+        self.window.actionReplaceAll.triggered.connect(self.onReplaceAllClick)
+        self.window.actionFindSelectNext.triggered.connect(self.onFindSelectNextClick)
+        self.window.actionFindSelectAll.triggered.connect(self.onFindSelectAllClick)
+
         self.window.actionAbout.triggered.connect(self.onAboutClick)
 
         self.window.textEdit.undoAvailable.connect(self.window.actionUndo.setEnabled)
@@ -41,6 +52,15 @@ class MainWindow(QObject):
         self.window.actionRedo.setEnabled(False)
         self.window.actionCopy.setEnabled(False)
         self.window.actionCut.setEnabled(False)
+
+        # Find box
+        self.window.buttonCloseFind.clicked.connect(self.onCloseFindClicked)
+        self.window.buttonFind.clicked.connect(self.onFindNextClick)
+        self.window.buttonFindAll.clicked.connect(self.onFindAllClick)
+        self.window.buttonReplace.clicked.connect(self.onReplaceNextClick)
+        self.window.buttonReplaceAll.clicked.connect(self.onReplaceAllClick)
+
+        self.window.frameFindBox.hide()
 
         # Statusbar
         self.labelStatus = QLabel()
@@ -84,6 +104,8 @@ class MainWindow(QObject):
             elif ret == QMessageBox.No:
                 discard = True
         return not self.window.textEdit.document().isModified() or discard
+
+    # File Menu
 
     def onNewFileClick(self):
         if self.confirmToSave():
@@ -138,6 +160,137 @@ class MainWindow(QObject):
         if self.confirmToSave():
             self.window.removeEventFilter(self)
             app.exit()
+
+    # Find Menu
+
+    def getFindFlags(self):
+        flags = QTextDocument.FindFlags()
+        if self.window.buttonCase.isChecked():
+            flags = flags | QTextDocument.FindCaseSensitively
+        if self.window.buttonWords.isChecked():
+            flags = flags | QTextDocument.FindWholeWords
+        return flags
+
+    def getFindText(self):
+        text = self.window.editFind.text()
+        if self.window.buttonRegex.isChecked():
+            return QRegExp(text)
+        else:
+            return text
+
+    def onFindClick(self):
+        self.window.frameFindBox.show()
+        self.window.frameReplace.hide()
+
+    def onFindNextClick(self):
+        # This didn't work!
+        # self.window.textEdit.find(self.getFindText())
+        cursor = self.window.textEdit.textCursor()
+        flags = self.getFindFlags()
+        cursor = self.window.textEdit.document().find(self.getFindText(), cursor, flags)
+        if not cursor.isNull():
+            self.window.labelFindResult.setText('')
+            self.window.textEdit.setTextCursor(cursor)
+        else:
+            self.window.labelFindResult.setText(self.tr('Not found'))
+            self.window.labelFindResult.setStyleSheet('color: red;')
+        self.window.textEdit.setFocus()
+
+    def onFindPreviousClick(self):
+        cursor = self.window.textEdit.textCursor()
+        flags = self.getFindFlags() | QTextDocument.FindBackward
+        cursor = self.window.textEdit.document().find(self.getFindText(), cursor, flags)
+        if not cursor.isNull():
+            self.window.labelFindResult.setText('')
+            self.window.textEdit.setTextCursor(cursor)
+        else:
+            self.window.labelFindResult.setText(self.tr('Not found'))
+            self.window.labelFindResult.setStyleSheet('color: red;')
+        self.window.textEdit.setFocus()
+
+    def onFindAllClick(self):
+        extraSelections = []
+        flags = self.getFindFlags()
+        self.window.textEdit.moveCursor(QTextCursor.Start)
+        cursor = self.window.textEdit.textCursor()
+        while True:
+            cursor = self.window.textEdit.document().find(self.getFindText(), cursor, flags)
+            if cursor.isNull():
+                break
+            selection = QTextEdit.ExtraSelection()
+            selection.format.setBackground(QColor(191, 191, 191, 189))
+            selection.cursor = cursor
+            extraSelections.append(selection)
+
+        if len(extraSelections):
+            self.window.labelFindResult.setText(self.tr('%d found') % len(extraSelections))
+            self.window.labelFindResult.setStyleSheet('color: green;')
+            self.window.textEdit.setExtraSelections(extraSelections)
+            self.window.textEdit.moveCursor(QTextCursor.End)
+        else:
+            self.window.labelFindResult.setText(self.tr('Not found'))
+            self.window.labelFindResult.setStyleSheet('color: red;')
+        self.window.textEdit.setFocus()
+
+    def onReplaceClick(self):
+        self.window.frameFindBox.show()
+        self.window.frameReplace.show()
+
+    def onReplaceNextClick(self):
+        cursor = self.window.textEdit.textCursor()
+        flags = flags = self.getFindFlags()
+        cursor = self.window.textEdit.document().find(self.getFindText(), cursor, flags)
+        if not cursor.isNull():
+            self.window.labelFindResult.setText('')
+            self.window.textEdit.setTextCursor(cursor)
+            cursor.beginEditBlock()
+            cursor.removeSelectedText()
+            cursor.insertText(self.window.editReplace.text())
+            cursor.endEditBlock()
+        else:
+            self.window.labelFindResult.setText(self.tr('Not found'))
+            self.window.labelFindResult.setStyleSheet('color: red;')
+        self.window.textEdit.setFocus()
+
+    def onReplaceAllClick(self):
+        results = 0
+        flags = self.getFindFlags()
+        self.window.textEdit.moveCursor(QTextCursor.Start)
+        cursor = self.window.textEdit.textCursor()
+        cursor.beginEditBlock()
+        while True:
+            resultCursor = self.window.textEdit.document().find(self.getFindText(), cursor, flags)
+            if resultCursor.isNull():
+                break
+            cursor.setPosition(resultCursor.anchor())
+            cursor.setPosition(resultCursor.position(), QTextCursor.KeepAnchor)
+            cursor.removeSelectedText()
+            cursor.insertText(self.window.editReplace.text())
+            results += 1
+        cursor.endEditBlock()
+
+        if results:
+            self.window.labelFindResult.setText(self.tr('%d replaced') % results)
+            self.window.labelFindResult.setStyleSheet('color: green;')
+            self.window.textEdit.moveCursor(QTextCursor.End)
+        else:
+            self.window.labelFindResult.setText(self.tr('Not found'))
+            self.window.labelFindResult.setStyleSheet('color: red;')
+        self.window.textEdit.setFocus()
+
+    def onFindSelectNextClick(self):
+        # TODO: implement this
+        pass
+
+    def onFindSelectAllClick(self):
+        # TODO: implement this
+        pass
+
+    def onCloseFindClicked(self):
+        self.window.frameFindBox.hide()
+        self.window.textEdit.setExtraSelections([])
+
+    # Help Menu
 
     def onAboutClick(self):
         QMessageBox.about(self.window, self.tr('About Momiji'), 'Momiji v0.1\nsimple cross-platform text editor')
