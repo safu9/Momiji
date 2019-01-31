@@ -116,6 +116,7 @@ class MainWindow(QObject):
         if self.confirmToSave():
             self.window.textEdit.setPlainText('')
             self.setTitle()
+            self.highlighter.clearType()
 
     def onOpenClick(self):
         if self.confirmToSave():
@@ -138,8 +139,8 @@ class MainWindow(QObject):
                 self.labelEncoding.setText(self.encoding)
                 self.window.textEdit.setDocumentTitle(filepath)
                 self.setTitle()
-                self.highlighter.setType(filepath)
-                self.highlighter.rehighlight()
+                self.highlighter.setTypeByFilename(filepath)
+                self.highlighter.highlight()
 
     def onSaveClick(self):
         filepath = self.window.textEdit.documentTitle()
