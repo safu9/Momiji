@@ -1,7 +1,7 @@
 from PySide2.QtGui import QFont
 from PySide2.QtWidgets import QDialog
 
-from settings_ui import Ui_Dialog
+from settings_ui import Ui_SettingsDialog
 
 
 class SettingsDialog(QDialog):
@@ -11,7 +11,7 @@ class SettingsDialog(QDialog):
 
         self.settings = settings
 
-        self.ui = Ui_Dialog()
+        self.ui = Ui_SettingsDialog()
         self.ui.setupUi(self)
 
         self.font = QFont()
@@ -25,6 +25,7 @@ class SettingsDialog(QDialog):
         self.ui.fontComboBox.currentFontChanged.connect(self.onChangeFont)
         self.ui.spinBoxSize.valueChanged.connect(self.onChangeSize)
 
+        self.setWindowTitle(self.tr('Settings'))
         self.open()
 
     def onChangeFont(self, f):

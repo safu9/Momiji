@@ -3,20 +3,20 @@
 # Form implementation generated from reading ui file 'settings.ui',
 # licensing of 'settings.ui' applies.
 #
-# Created: Fri Feb  1 01:03:18 2019
+# Created: Fri Feb  1 01:23:04 2019
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(207, 178)
-        self.verticalLayout = QtWidgets.QVBoxLayout(Dialog)
+class Ui_SettingsDialog(object):
+    def setupUi(self, SettingsDialog):
+        SettingsDialog.setObjectName("SettingsDialog")
+        SettingsDialog.resize(207, 178)
+        self.verticalLayout = QtWidgets.QVBoxLayout(SettingsDialog)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.frame = QtWidgets.QFrame(Dialog)
+        self.frame = QtWidgets.QFrame(SettingsDialog)
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
@@ -54,21 +54,20 @@ class Ui_Dialog(object):
         self.labelPreviewFont.setObjectName("labelPreviewFont")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.labelPreviewFont)
         self.verticalLayout.addWidget(self.frame)
-        self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
+        self.buttonBox = QtWidgets.QDialogButtonBox(SettingsDialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout.addWidget(self.buttonBox)
 
-        self.retranslateUi(Dialog)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("accepted()"), Dialog.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), Dialog.reject)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.retranslateUi(SettingsDialog)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("accepted()"), SettingsDialog.accept)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), SettingsDialog.reject)
+        QtCore.QMetaObject.connectSlotsByName(SettingsDialog)
 
-    def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtWidgets.QApplication.translate("Dialog", "Dialog", None, -1))
-        self.labelFont.setText(QtWidgets.QApplication.translate("Dialog", "Font", None, -1))
-        self.labelSize.setText(QtWidgets.QApplication.translate("Dialog", "Size", None, -1))
-        self.labelPreview.setText(QtWidgets.QApplication.translate("Dialog", "Preview", None, -1))
-        self.labelPreviewFont.setText(QtWidgets.QApplication.translate("Dialog", "AaBbCc123", None, -1))
+    def retranslateUi(self, SettingsDialog):
+        self.labelFont.setText(QtWidgets.QApplication.translate("SettingsDialog", "Font", None, -1))
+        self.labelSize.setText(QtWidgets.QApplication.translate("SettingsDialog", "Size", None, -1))
+        self.labelPreview.setText(QtWidgets.QApplication.translate("SettingsDialog", "Preview", None, -1))
+        self.labelPreviewFont.setText(QtWidgets.QApplication.translate("SettingsDialog", "AaBbCc123", None, -1))
 
