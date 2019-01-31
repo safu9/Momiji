@@ -1,7 +1,8 @@
+import os
 import sys
 
 import chardet
-from PySide2.QtCore import QEvent, QLocale, QObject, QRegExp, QTranslator
+from PySide2.QtCore import QEvent, QLocale, QObject, QRegExp, QSettings, QTranslator
 from PySide2.QtGui import QColor, QTextCursor, QTextDocument
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox, QStyle, QTextEdit
@@ -83,6 +84,9 @@ class MainWindow(QObject):
         self.labelEncoding.setText(self.encoding)
         self.labelType.setText(self.highlighter.typeName())
 
+        # Settings
+        self.settings = QSettings(QSettings.IniFormat, QSettings.UserScope, 'Momiji', 'Momiji')
+
         self.setTitle()
         self.window.installEventFilter(self)
         self.window.resize(800, 600)
@@ -124,9 +128,13 @@ class MainWindow(QObject):
 
     def onOpenClick(self):
         if self.confirmToSave():
-            ret = QFileDialog.getOpenFileName(self.window, self.tr('Open File'), '', self.tr('Text files (*.txt);;Any files (*)'))
-            if ret and ret[0]:
-                filepath = ret[0]
+            filters = self.tr('Text files (*.txt);;Any files (*)')
+            defaultFilter = self.settings.value('mainwindow/filter')
+            defaultPath = self.settings.value('mainwindow/path')
+            filepath, filter = QFileDialog.getOpenFileName(self.window, self.tr('Open File'), defaultPath, filters, defaultFilter)
+            if filepath:
+                self.settings.setValue('mainwindow/path', os.path.dirname(filepath))
+                self.settings.setValue('mainwindow/filter', filter)
                 with open(filepath, 'rb') as file:
                     bin = file.read()
                     det = chardet.detect(bin)
