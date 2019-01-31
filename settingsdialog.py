@@ -1,7 +1,7 @@
 from PySide2.QtGui import QFont
 from PySide2.QtWidgets import QDialog
 
-from settings_ui import Ui_SettingsDialog
+from ui.settings import Ui_SettingsDialog
 
 
 class SettingsDialog(QDialog):
