@@ -74,11 +74,14 @@ class MainWindow(QObject):
         self.window.statusBar().addPermanentWidget(self.labelNewLine)
         self.labelEncoding = QLabel()
         self.window.statusBar().addPermanentWidget(self.labelEncoding)
+        self.labelType = QLabel()
+        self.window.statusBar().addPermanentWidget(self.labelType)
 
         self.newline = 'LF'
         self.labelNewLine.setText(self.newline)
         self.encoding = 'UTF-8'
         self.labelEncoding.setText(self.encoding)
+        self.labelType.setText(self.highlighter.typeName())
 
         self.setTitle()
         self.window.installEventFilter(self)
@@ -117,6 +120,7 @@ class MainWindow(QObject):
             self.window.textEdit.setPlainText('')
             self.setTitle()
             self.highlighter.clearType()
+            self.labelType.setText(self.highlighter.typeName())
 
     def onOpenClick(self):
         if self.confirmToSave():
@@ -141,6 +145,7 @@ class MainWindow(QObject):
                 self.setTitle()
                 self.highlighter.setTypeByFilename(filepath)
                 self.highlighter.highlight()
+                self.labelType.setText(self.highlighter.typeName())
 
     def onSaveClick(self):
         filepath = self.window.textEdit.documentTitle()

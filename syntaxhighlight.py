@@ -95,6 +95,10 @@ class SyntaxHighlighter(QObject):
         self.document.contentsChange.connect(self.highlight)
 
     def setTypeByFilename(self, filename):
+        if not filename or filename.lower().endswith('.txt'):
+            self.lexer = None
+            return
+
         try:
             self.lexer = get_lexer_for_filename(filename)
         except ClassNotFound:
@@ -102,6 +106,9 @@ class SyntaxHighlighter(QObject):
 
     def clearType(self):
         self.lexer = None
+
+    def typeName(self):
+        return self.lexer.name if self.lexer else 'Text'
 
     def highlight(self):
         if not self.lexer:
