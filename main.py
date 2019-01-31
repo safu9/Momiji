@@ -100,7 +100,10 @@ class MainWindow(QMainWindow):
 
         self.setTitle()
         self.setWindowIcon(QIcon('./res/icon.png'))
-        self.resize(800, 600)
+
+        self.move(int(self.settings.value('main/x', 300)), int(self.settings.value('main/y', 200)))
+        self.resize(int(self.settings.value('main/width', 800)), int(self.settings.value('main/height', 600)))
+
         self.show()
 
     def closeEvent(self, event):
@@ -200,6 +203,10 @@ class MainWindow(QMainWindow):
 
     def onExitClick(self):
         if self.confirmToSave():
+            self.settings.setValue('main/x', self.pos().x())
+            self.settings.setValue('main/y', self.pos().y())
+            self.settings.setValue('main/width', self.size().width())
+            self.settings.setValue('main/height', self.size().height())
             app.exit()
 
     # Find Menu
