@@ -6,6 +6,8 @@ from PySide2.QtGui import QColor, QTextCursor, QTextDocument
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox, QStyle, QTextEdit
 
+from syntaxhighlight import SyntaxHighlighter
+
 
 class MainWindow(QObject):
 
@@ -52,6 +54,9 @@ class MainWindow(QObject):
         self.window.actionRedo.setEnabled(False)
         self.window.actionCopy.setEnabled(False)
         self.window.actionCut.setEnabled(False)
+
+        # Syntax Highlight
+        self.highlighter = SyntaxHighlighter(self.window.textEdit.document())
 
         # Find box
         self.window.buttonCloseFind.clicked.connect(self.onCloseFindClicked)
@@ -133,6 +138,8 @@ class MainWindow(QObject):
                 self.labelEncoding.setText(self.encoding)
                 self.window.textEdit.setDocumentTitle(filepath)
                 self.setTitle()
+                self.highlighter.setType(filepath)
+                self.highlighter.rehighlight()
 
     def onSaveClick(self):
         filepath = self.window.textEdit.documentTitle()
