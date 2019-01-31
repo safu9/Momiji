@@ -1,4 +1,4 @@
-from PySide2.QtGui import QFont
+from PySide2.QtGui import QFont, QIcon
 from PySide2.QtWidgets import QDialog
 
 from ui.settings import Ui_SettingsDialog
@@ -26,6 +26,7 @@ class SettingsDialog(QDialog):
         self.ui.spinBoxSize.valueChanged.connect(self.onChangeSize)
 
         self.setWindowTitle(self.tr('Settings'))
+        self.setWindowIcon(QIcon('./res/icon.png'))
         self.open()
 
     def onChangeFont(self, f):

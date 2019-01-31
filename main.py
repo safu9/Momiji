@@ -3,7 +3,7 @@ import sys
 
 import chardet
 from PySide2.QtCore import QLocale, QObject, QRegExp, QSettings, QTranslator
-from PySide2.QtGui import QColor, QFont, QTextCursor, QTextDocument
+from PySide2.QtGui import QColor, QFont, QIcon, QTextCursor, QTextDocument
 from PySide2.QtWidgets import QApplication, QFileDialog, QLabel, QMainWindow, QMessageBox, QStyle, QTextEdit
 
 from settingsdialog import SettingsDialog
@@ -95,6 +95,7 @@ class MainWindow(QMainWindow):
         self.labelType.setText(self.highlighter.typeName())
 
         self.setTitle()
+        self.setWindowIcon(QIcon('./res/icon.png'))
         self.resize(800, 600)
         self.show()
 
