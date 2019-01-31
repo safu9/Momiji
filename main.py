@@ -80,12 +80,16 @@ class MainWindow(QMainWindow):
 
         # Statusbar
         self.labelStatus = QLabel()
+        self.labelStatus.setMargin(2)
         self.statusBar().addPermanentWidget(self.labelStatus, stretch=1)
         self.labelNewLine = QLabel()
+        self.labelNewLine.setMargin(2)
         self.statusBar().addPermanentWidget(self.labelNewLine)
         self.labelEncoding = QLabel()
+        self.labelEncoding.setMargin(2)
         self.statusBar().addPermanentWidget(self.labelEncoding)
         self.labelType = QLabel()
+        self.labelType.setMargin(2)
         self.statusBar().addPermanentWidget(self.labelType)
 
         self.newline = 'LF'
