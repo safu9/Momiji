@@ -3,10 +3,11 @@ import sys
 
 import chardet
 from PySide2.QtCore import QEvent, QLocale, QObject, QRegExp, QSettings, QTranslator
-from PySide2.QtGui import QColor, QTextCursor, QTextDocument
+from PySide2.QtGui import QColor, QFont, QTextCursor, QTextDocument
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QFileDialog, QLabel, QMessageBox, QStyle, QTextEdit
 
+from settingsdialog import SettingsDialog
 from syntaxhighlight import SyntaxHighlighter
 
 
@@ -19,11 +20,15 @@ class MainWindow(QObject):
         loader = QUiLoader()
         self.window = loader.load(filename)
 
+        # Settings
+        self.settings = QSettings(QSettings.IniFormat, QSettings.UserScope, 'Momiji', 'Momiji')
+
         # Menu
         self.window.actionNewFile.triggered.connect(self.onNewFileClick)
         self.window.actionOpen.triggered.connect(self.onOpenClick)
         self.window.actionSave.triggered.connect(self.onSaveClick)
         self.window.actionSaveAs.triggered.connect(self.onSaveAsClick)
+        self.window.actionSettings.triggered.connect(self.onSettingsClick)
         self.window.actionExit.triggered.connect(self.onExitClick)
 
         self.window.actionUndo.triggered.connect(self.window.textEdit.undo)
@@ -56,7 +61,12 @@ class MainWindow(QObject):
         self.window.actionCopy.setEnabled(False)
         self.window.actionCut.setEnabled(False)
 
-        # Syntax Highlight
+        # Editor
+        font = QFont()
+        font.setFamily(self.settings.value('editor/font', font.defaultFamily()))
+        font.setPointSize(int(self.settings.value('editor/size', 9)))
+        self.window.textEdit.setFont(font)
+
         self.highlighter = SyntaxHighlighter(self.window.textEdit.document())
 
         # Find box
@@ -83,9 +93,6 @@ class MainWindow(QObject):
         self.encoding = 'UTF-8'
         self.labelEncoding.setText(self.encoding)
         self.labelType.setText(self.highlighter.typeName())
-
-        # Settings
-        self.settings = QSettings(QSettings.IniFormat, QSettings.UserScope, 'Momiji', 'Momiji')
 
         self.setTitle()
         self.window.installEventFilter(self)
@@ -176,6 +183,19 @@ class MainWindow(QObject):
             self.window.textEdit.setDocumentTitle(filepath)
             self.window.textEdit.document().setModified(False)
             self.setTitle()
+
+    def onSettingsClick(self):
+        if not getattr(self, 'settingsDialog', None):
+            self.settingsDialog = SettingsDialog(self.settings)
+            self.settingsDialog.finished.connect(self.onSettingsClosed)
+
+    def onSettingsClosed(self, result):
+        if result:
+            font = QFont()
+            font.setFamily(self.settings.value('editor/font', font.defaultFamily()))
+            font.setPointSize(self.settings.value('editor/size', 9))
+            self.window.textEdit.setFont(font)
+        self.settingsDialog = None
 
     def onExitClick(self):
         if self.confirmToSave():
