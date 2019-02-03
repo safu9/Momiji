@@ -1,7 +1,7 @@
 SOURCES = \
-    main.py \
-    settingsdialog.py \
-    syntaxhighlight.py
+    core/main.py \
+    core/settingsdialog.py \
+    core/syntaxhighlight.py
 FORMS = \
     ui/window.ui \
     ui/settings.ui
