@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'window.ui',
-# licensing of 'window.ui' applies.
+# Form implementation generated from reading ui file 'ui/window.ui',
+# licensing of 'ui/window.ui' applies.
 #
-# Created: Fri Feb  1 01:23:03 2019
+# Created: Sun Feb  3 04:17:22 2019
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -21,13 +21,23 @@ class Ui_MainWindow(object):
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.textEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_4.setSpacing(0)
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.textEdit = TextEdit(self.frame)
         font = QtGui.QFont()
         font.setPointSize(11)
         self.textEdit.setFont(font)
+        self.textEdit.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.textEdit.setLineWrapMode(QtWidgets.QPlainTextEdit.NoWrap)
         self.textEdit.setObjectName("textEdit")
-        self.verticalLayout.addWidget(self.textEdit)
+        self.horizontalLayout_4.addWidget(self.textEdit)
+        self.verticalLayout.addWidget(self.frame)
         self.frameFindBox = QtWidgets.QFrame(self.centralwidget)
         self.frameFindBox.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frameFindBox.setFrameShadow(QtWidgets.QFrame.Plain)
@@ -266,3 +276,4 @@ class Ui_MainWindow(object):
         self.actionAbout.setText(QtWidgets.QApplication.translate("MainWindow", "About Momiji", None, -1))
         self.actionSettings.setText(QtWidgets.QApplication.translate("MainWindow", "Settings", None, -1))
 
+from widget.textedit import TextEdit
