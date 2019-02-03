@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="en">
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>MainWindow</name>
     <message>
@@ -68,7 +69,7 @@
         <translation>Select All</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="340"/>
+        <location filename="core/main.py" line="351"/>
         <source>About Momiji</source>
         <translation>About Momiji</translation>
     </message>
@@ -83,27 +84,27 @@
         <translation>untitled</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="128"/>
+        <location filename="core/main.py" line="130"/>
         <source>Confirm</source>
         <translation>Confirm</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="128"/>
+        <location filename="core/main.py" line="131"/>
         <source>This file has chages, do you want to save them?</source>
         <translation>This file has changes, do you want to save them?</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="149"/>
+        <location filename="core/main.py" line="160"/>
         <source>Open File</source>
         <translation>Open File</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="185"/>
+        <location filename="core/main.py" line="196"/>
         <source>Text files (*.txt);;Any files (*)</source>
         <translation>Text files (*.txt);;Any files (*)</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="185"/>
+        <location filename="core/main.py" line="196"/>
         <source>Save File</source>
         <translation>Save File</translation>
     </message>
@@ -178,17 +179,17 @@
         <translation>Select Next</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="321"/>
+        <location filename="core/main.py" line="332"/>
         <source>Not found</source>
         <translation>Not found</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="270"/>
+        <location filename="core/main.py" line="281"/>
         <source>%d found</source>
         <translation>%d found</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="317"/>
+        <location filename="core/main.py" line="328"/>
         <source>%d replaced</source>
         <translation>%d replaced</translation>
     </message>
@@ -196,6 +197,21 @@
         <location filename="ui/window.ui" line="521"/>
         <source>Settings</source>
         <translation>Settings</translation>
+    </message>
+    <message>
+        <location filename="core/main.py" line="133"/>
+        <source>Yes</source>
+        <translation>Yes</translation>
+    </message>
+    <message>
+        <location filename="core/main.py" line="134"/>
+        <source>No</source>
+        <translation>No</translation>
+    </message>
+    <message>
+        <location filename="core/main.py" line="135"/>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>

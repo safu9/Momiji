@@ -125,7 +125,18 @@ class MainWindow(QMainWindow):
     def confirmToSave(self):
         discard = False
         if self.ui.textEdit.document().isModified():
-            ret = QMessageBox.question(self, self.tr('Confirm'), self.tr('This file has chages, do you want to save them?'))
+            msgBox = QMessageBox(self)
+            msgBox.setIcon(QMessageBox.Information)
+            msgBox.setWindowTitle(self.tr('Confirm'))
+            msgBox.setText(self.tr('This file has chages, do you want to save them?'))
+            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+            msgBox.setButtonText(QMessageBox.Yes, self.tr('Yes'))
+            msgBox.setButtonText(QMessageBox.No, self.tr('No'))
+            msgBox.setButtonText(QMessageBox.Cancel, self.tr('Cancel'))
+            msgBox.setDefaultButton(QMessageBox.Yes)
+            msgBox.setEscapeButton(QMessageBox.Cancel)
+            ret = msgBox.exec_()
+
             if ret == QMessageBox.Yes:
                 self.onSaveClick()
             elif ret == QMessageBox.No:

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="ja">
+<!DOCTYPE TS>
+<TS version="2.1" language="ja">
 <context>
     <name>MainWindow</name>
     <message>
@@ -68,7 +69,7 @@
         <translation>すべて選択</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="340"/>
+        <location filename="core/main.py" line="351"/>
         <source>About Momiji</source>
         <translation>Momiji について</translation>
     </message>
@@ -83,27 +84,27 @@
         <translation>無題</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="128"/>
+        <location filename="core/main.py" line="130"/>
         <source>Confirm</source>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="128"/>
+        <location filename="core/main.py" line="131"/>
         <source>This file has chages, do you want to save them?</source>
         <translation>このファイルは変更されています。保存しますか？</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="149"/>
+        <location filename="core/main.py" line="160"/>
         <source>Open File</source>
         <translation>ファイルを開く</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="185"/>
+        <location filename="core/main.py" line="196"/>
         <source>Text files (*.txt);;Any files (*)</source>
         <translation>テキストファイル (*.txt);;すべてのファイル (*)</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="185"/>
+        <location filename="core/main.py" line="196"/>
         <source>Save File</source>
         <translation>ファイルを保存</translation>
     </message>
@@ -178,17 +179,17 @@
         <translation>次を選択</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="321"/>
+        <location filename="core/main.py" line="332"/>
         <source>Not found</source>
         <translation>見つかりませんでした</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="270"/>
+        <location filename="core/main.py" line="281"/>
         <source>%d found</source>
         <translation>%d件</translation>
     </message>
     <message>
-        <location filename="core/main.py" line="317"/>
+        <location filename="core/main.py" line="328"/>
         <source>%d replaced</source>
         <translation>%d件を置換</translation>
     </message>
@@ -196,6 +197,21 @@
         <location filename="ui/window.ui" line="521"/>
         <source>Settings</source>
         <translation>設定</translation>
+    </message>
+    <message>
+        <location filename="core/main.py" line="133"/>
+        <source>Yes</source>
+        <translation>はい</translation>
+    </message>
+    <message>
+        <location filename="core/main.py" line="134"/>
+        <source>No</source>
+        <translation>いいえ</translation>
+    </message>
+    <message>
+        <location filename="core/main.py" line="135"/>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
     </message>
 </context>
 <context>
