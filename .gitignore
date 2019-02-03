@@ -5,3 +5,7 @@ __pycache__/
 
 # Qt
 i18n/*.qm
+
+# Build
+/build/
+/dist/
