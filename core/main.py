@@ -1,9 +1,9 @@
 import os
 
 import chardet
-from PySide2.QtCore import QObject, QRegExp, QSettings
+from PySide2.QtCore import QRegExp, QSettings
 from PySide2.QtGui import QColor, QFont, QIcon, QTextCursor, QTextDocument
-from PySide2.QtWidgets import QFileDialog, QLabel, QMainWindow, QMessageBox, QStyle, QTextEdit
+from PySide2.QtWidgets import QFileDialog, QLabel, QMainWindow, QMessageBox, QTextEdit
 
 from core.settingsdialog import SettingsDialog
 from core.syntaxhighlight import SyntaxHighlighter

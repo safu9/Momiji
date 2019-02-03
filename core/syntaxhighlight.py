@@ -1,6 +1,6 @@
 from pygments import highlight
-from pygments.lexers import get_lexer_for_filename
 from pygments.formatter import Formatter
+from pygments.lexers import get_lexer_for_filename
 from pygments.util import ClassNotFound
 from PySide2.QtCore import QObject
 from PySide2.QtGui import QColor, QFont, QTextCharFormat, QTextLayout

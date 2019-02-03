@@ -1,4 +1,4 @@
-from PySide2.QtCore import Qt, QSize
+from PySide2.QtCore import QSize, Qt
 from PySide2.QtGui import QColor, QPainter
 from PySide2.QtWidgets import QWidget
 
@@ -30,7 +30,10 @@ class LineNumberView(QWidget):
         while block.isValid() and top <= event.rect().bottom():
             if block.isVisible() and bottom >= event.rect().top():
                 painter.setPen(QColor('#999999'))
-                painter.drawText(self.margin, int(top), self.width() - self.margin * 2, self.editor.fontMetrics().height(), Qt.AlignRight, str(blockNumber + 1))
+                painter.drawText(
+                    self.margin, int(top), self.width() - self.margin * 2, self.editor.fontMetrics().height(),
+                    Qt.AlignRight, str(blockNumber + 1)
+                )
 
             block = block.next()
             blockNumber += 1
